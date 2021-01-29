@@ -1,16 +1,16 @@
 {
-  "name": "react-reduce-observable",
+  "name": "react-reducer-observable",
   "version": "1.0.0-alpha.1",
   "description": "rxjs observable patterns for React reducers",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc src/index.tsx",
+    "build": "tsc",
     "lint": "eslint src --ext .ts,.tsx",
     "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anigenero/react-reduce-observable.git"
+    "url": "git+https://github.com/anigenero/react-reducer-observable.git"
   },
   "keywords": [
     "react",
@@ -24,9 +24,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/anigenero/react-reduce-observable/issues"
+    "url": "https://github.com/anigenero/react-reducer-observable/issues"
   },
-  "homepage": "https://github.com/anigenero/react-reduce-observable#readme",
+  "homepage": "https://github.com/anigenero/react-reducer-observable#readme",
   "peerDependencies": {
     "react": "^17.0.1"
   },
