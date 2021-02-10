@@ -38,7 +38,7 @@ export const createObservableReducerContext =
 
                 const [state, dispatch] = useReducer(reducer, defaultState);
 
-                const cDispatch = dispatchWrapper<A, S, R, D>(epic$, dispatch, state, dependencies);
+                const cDispatch = dispatchWrapper<A, S, D>(epic$, dispatch, state, dependencies);
                 const rootEpic = combineEpics(
                     ...epics
                 );

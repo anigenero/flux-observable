@@ -1,4 +1,4 @@
-import {Dispatch, Reducer} from 'react';
+import {Dispatch} from 'react';
 import {from, queueScheduler, Subject} from 'rxjs';
 import {QueueScheduler} from 'rxjs/internal/scheduler/QueueScheduler';
 import {map, mergeMap, observeOn, subscribeOn} from 'rxjs/operators';
@@ -13,7 +13,7 @@ const uniqueQueueScheduler: QueueSchedulerType = new QueueScheduler(
 
 // creates a wrapper for dispatch that will send to the epic's observable chain
 export const dispatchWrapper =
-    <A extends Action, S, R extends Reducer<S, A>, D = any>(
+    <A extends Action, S, D = any>(
         epic$: Subject<Epic<A, A, S, D>>,
         dispatch: Dispatch<any>,
         state: S,

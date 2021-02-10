@@ -1,8 +1,8 @@
-import {Reducer} from 'react';
+import React, {Dispatch, FunctionComponent, Reducer} from 'react';
+import {create} from 'react-test-renderer';
 import {from, of} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
-import {Epic} from '../combine.epics';
-import {ofType} from '../ofType';
+import {createObservableReducerContext, Epic, ofType} from '../index';
 
 export type Dependencies = {
     service: (task: string) => string;
@@ -87,3 +87,51 @@ export namespace ReducerEpics {
             );
 
 }
+
+export type TaskComponentProps = {
+    taskName: string;
+    useContext: () => {
+        dispatch: Dispatch<TaskAction>;
+        state: TaskState;
+    };
+};
+
+export const TaskComponent: FunctionComponent<TaskComponentProps> = ({taskName, useContext}) => {
+
+    const {state, dispatch} = useContext();
+
+    return (
+        <div>
+            {state.task}
+            <button id="task-dispatch-btn" onClick={() =>
+                dispatch(TaskDispatchActions.startTask(taskName))
+            }/>
+        </div>
+    );
+
+};
+
+describe('createObservableReducerContext', () => {
+
+    const serviceFunction = jest.fn().mockResolvedValue('task1');
+
+    it('should create context', () => {
+
+        const {Provider, useObservableContext} = createObservableReducerContext(taskReducer, [
+            ReducerEpics.startTask
+        ], {service: serviceFunction});
+
+        const tree = create(
+            <Provider options={{state: defaultState}}>
+                <TaskComponent taskName="test"
+                               useContext={useObservableContext}/>
+            </Provider>
+        ).toJSON();
+
+        expect(tree).toMatchSnapshot();
+
+    });
+
+    // TODO: test epics lifecycle
+
+});
