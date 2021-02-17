@@ -26,8 +26,6 @@ export const createObservableReducerContext =
         dependencies?: D
     ): ObservableContext<A, S, R> => {
 
-        const epic$ = new Subject<Epic<A, A, S, D>>();
-
         const Context = createContext<{
             state: ReducerState<R>;
             dispatch: Dispatch<A>;
@@ -38,6 +36,7 @@ export const createObservableReducerContext =
 
                 const [state, dispatch] = useReducer(reducer, defaultState);
 
+                const epic$ = new Subject<Epic<A, A, S, D>>();
                 const cDispatch = dispatchWrapper<A, S, D>(epic$, dispatch, state, dependencies);
                 const rootEpic = combineEpics(
                     ...epics

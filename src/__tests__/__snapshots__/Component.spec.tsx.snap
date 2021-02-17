@@ -6,5 +6,106 @@ exports[`createObservableReducerContext should create context 1`] = `
     id="task-dispatch-btn"
     onClick={[Function]}
   />
+  <button
+    id="bad-dispatch-btn"
+    onClick={[Function]}
+  />
 </div>
+`;
+
+exports[`createObservableReducerContext should dispatch event 1`] = `
+<Provider
+  options={
+    Object {
+      "state": Object {
+        "task": null,
+      },
+    }
+  }
+>
+  <TaskComponent
+    taskName="test"
+    useContext={[Function]}
+  >
+    <div>
+      <button
+        id="task-dispatch-btn"
+        onClick={[Function]}
+      />
+      <button
+        id="bad-dispatch-btn"
+        onClick={[Function]}
+      />
+    </div>
+  </TaskComponent>
+</Provider>
+`;
+
+exports[`createObservableReducerContext should dispatch event 2`] = `
+<Provider
+  options={
+    Object {
+      "state": Object {
+        "task": null,
+      },
+    }
+  }
+>
+  <TaskComponent
+    taskName="test"
+    useContext={[Function]}
+  >
+    <div>
+      <button
+        id="task-dispatch-btn"
+        onClick={[Function]}
+      />
+      <button
+        id="bad-dispatch-btn"
+        onClick={[Function]}
+      />
+    </div>
+  </TaskComponent>
+</Provider>
+`;
+
+exports[`createObservableReducerContext should error out for bad stream 1`] = `
+<div>
+  <button
+    id="task-dispatch-btn"
+    onClick={[Function]}
+  />
+  <button
+    id="bad-dispatch-btn"
+    onClick={[Function]}
+  />
+</div>
+`;
+
+exports[`createObservableReducerContext should error out for bad stream on dispatch 1`] = `
+<Provider
+  options={
+    Object {
+      "state": Object {
+        "task": null,
+      },
+    }
+  }
+>
+  <TaskComponent
+    taskName="test"
+    useContext={[Function]}
+  >
+    <div>
+      <button
+        id="task-dispatch-btn"
+        onClick={[Function]}
+      />
+      <button
+        id="bad-dispatch-btn"
+        onClick={[Function]}
+      />
+    </div>
+  </TaskComponent>
+</Provider>
 `;

@@ -36,6 +36,7 @@ export const dispatchWrapper =
 
                 const output$ = epic(action$, state$, dependencies);
 
+                /* istanbul ignore if */
                 if (!output$) {
                     throw new TypeError(
                         `Your root Epic "${epic.name ||
