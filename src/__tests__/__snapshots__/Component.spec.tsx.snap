@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createObservableReducerContext should create context 1`] = `
+<div>
+  <button
+    id="task-dispatch-btn"
+    onClick={[Function]}
+  />
+</div>
+`;
