@@ -1,6 +1,6 @@
 {
   "name": "react-reducer-observable",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-beta.1",
   "description": "rxjs observable patterns for React reducers",
   "main": "dist/index.js",
   "scripts": {

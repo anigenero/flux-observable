@@ -55,13 +55,17 @@ export const dispatchWrapper =
             )
         );
 
-        result$.subscribe(dispatch);
-
-        return (action) => {
-
+        const _dispatch = (action: A) => {
             stateSubject$.next(state);
             actionSubject$.next(action);
-
         };
+
+        result$.subscribe((action) => {
+            dispatch(action);
+            // we need to include our internal dispatch in case the return action refers to another epic
+            _dispatch(action);
+        });
+
+        return _dispatch;
 
     };
