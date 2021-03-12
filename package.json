@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "lint": "eslint src --ext .ts,.tsx",
-    "test": "jest --coverage"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
