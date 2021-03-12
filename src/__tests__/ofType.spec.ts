@@ -10,9 +10,4 @@ describe('ofType', () => {
         expect(ofType(undefined)).toThrowError();
     });
 
-    it('should throw argument length error', () => {
-        // @ts-ignore
-        expect(ofType()).toThrowError();
-    });
-
 });

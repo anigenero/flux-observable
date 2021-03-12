@@ -90,8 +90,8 @@ export const taskReducer: Reducer<TaskState, TaskReducerAction> = (prevState, ac
 
 export namespace ReducerEpics {
 
-    export const startTask: Epic<TaskAction, TaskAction, TaskState, Dependencies> =
-        (action$, state$, {service}) =>
+    export const startTask: Epic<TaskAction, TaskAction, Dependencies> =
+        (action$, {service}) =>
             action$.pipe(
                 ofType(TaskActionTypes.START_TASK),
                 switchMap(({task}) =>
@@ -101,8 +101,8 @@ export namespace ReducerEpics {
                 )
             );
 
-    export const badTask: Epic<TaskAction, TaskAction, TaskState, Dependencies> =
-        (action$, state$, {service}) => null;
+    export const badTask: Epic<TaskAction, TaskAction, Dependencies> =
+        () => null;
 
 }
 
@@ -138,9 +138,10 @@ describe('createObservableReducerContext', () => {
 
     it('should create context', () => {
 
-        const {Provider, useObservableContext} = createObservableReducerContext(taskReducer, [
-            ReducerEpics.startTask
-        ], {service: serviceFunction});
+        const {Provider, useObservableContext} = createObservableReducerContext<TaskAction, TaskState, Reducer<TaskState, TaskAction>>(
+            taskReducer, [
+                ReducerEpics.startTask
+            ], {service: serviceFunction});
 
         const tree = create(
             <Provider options={{state: defaultState}}>
@@ -155,9 +156,11 @@ describe('createObservableReducerContext', () => {
 
     it('should dispatch event', () => {
 
-        const {Provider, useObservableContext} = createObservableReducerContext(taskReducer, [
-            ReducerEpics.startTask
-        ], {service: serviceFunction});
+        const {Provider, useObservableContext} = createObservableReducerContext<TaskAction, TaskState, Reducer<TaskState, TaskAction>>(
+            taskReducer, [
+                ReducerEpics.startTask
+            ], {service: serviceFunction}
+        );
 
         const wrapper = mount(
             <Provider options={{state: defaultState}}>
@@ -179,9 +182,11 @@ describe('createObservableReducerContext', () => {
 
     it('should error out for bad stream', () => {
 
-        const {Provider, useObservableContext} = createObservableReducerContext(taskReducer, [
-            ReducerEpics.badTask
-        ], {service: serviceFunction});
+        const {Provider, useObservableContext} = createObservableReducerContext<TaskAction, TaskState, Reducer<TaskState, TaskAction>>(
+            taskReducer, [
+                ReducerEpics.badTask
+            ], {service: serviceFunction}
+        );
 
         const tree = create(
             <Provider options={{state: defaultState}}>
@@ -191,25 +196,6 @@ describe('createObservableReducerContext', () => {
         ).toJSON();
 
         expect(tree).toMatchSnapshot();
-
-    });
-
-    it('should error out for bad stream on dispatch', () => {
-
-        const {Provider, useObservableContext} = createObservableReducerContext(taskReducer, null, {service: serviceFunction});
-
-        const wrapper = mount(
-            <Provider options={{state: defaultState}}>
-                <TaskComponent taskName="test"
-                               useContext={useObservableContext as any}/>
-            </Provider>
-        );
-
-        const btn = wrapper.find('#bad-dispatch-btn');
-        btn.simulate('click');
-
-        expect(toJson(wrapper)).toMatchSnapshot();
-
 
     });
 

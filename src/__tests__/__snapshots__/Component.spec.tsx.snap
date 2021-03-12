@@ -81,31 +81,3 @@ exports[`createObservableReducerContext should error out for bad stream 1`] = `
   />
 </div>
 `;
-
-exports[`createObservableReducerContext should error out for bad stream on dispatch 1`] = `
-<Provider
-  options={
-    Object {
-      "state": Object {
-        "task": null,
-      },
-    }
-  }
->
-  <TaskComponent
-    taskName="test"
-    useContext={[Function]}
-  >
-    <div>
-      <button
-        id="task-dispatch-btn"
-        onClick={[Function]}
-      />
-      <button
-        id="bad-dispatch-btn"
-        onClick={[Function]}
-      />
-    </div>
-  </TaskComponent>
-</Provider>
-`;
