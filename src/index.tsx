@@ -1,5 +1,6 @@
 import React, {createContext, Dispatch, FunctionComponent, Reducer, ReducerState, useContext, useReducer} from 'react';
-import {Subject} from 'rxjs';
+import {EMPTY, Subject} from 'rxjs';
+import {switchMap} from 'rxjs/operators';
 import {Action, combineEpics, Epic} from './combine.epics';
 import {dispatchWrapper} from './dispatchWrapper';
 
@@ -22,7 +23,7 @@ export interface ObservableContext<A extends Action, S, R extends Reducer<S, A>>
 export const createObservableReducerContext =
     <A extends Action, S, R extends Reducer<S, A>, D = any>(
         reducer: R,
-        epics: Epic<A, A, S, D>[],
+        epics: Epic<A, A, D>[],
         dependencies?: D
     ): ObservableContext<A, S, R> => {
 
@@ -36,10 +37,20 @@ export const createObservableReducerContext =
 
                 const [state, dispatch] = useReducer(reducer, defaultState);
 
-                const epic$ = new Subject<Epic<A, A, S, D>>();
-                const cDispatch = dispatchWrapper<A, S, D>(epic$, dispatch, state, dependencies);
+                const defaultEpic: Epic<A, A, D> =
+                    (action$) =>
+                        action$.pipe(
+                            switchMap((action) => {
+                                dispatch(action as any);
+                                return EMPTY;
+                            })
+                        );
+
+                const epic$ = new Subject<Epic<A, A, D>>();
+                const cDispatch = dispatchWrapper<A, D>(epic$, dispatch, dependencies);
                 const rootEpic = combineEpics(
-                    ...epics
+                    ...epics,
+                    defaultEpic
                 );
 
                 epic$.next(rootEpic);

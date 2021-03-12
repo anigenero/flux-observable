@@ -1,22 +1,20 @@
 import {merge, Observable} from 'rxjs';
-import {StateObservable} from './state.observable';
 
 export interface Action<T = any> {
     type: T;
 }
 
-export type Epic<A extends Action, O extends A = A, S = any, D = any> = (
+export type Epic<A extends Action, O extends A = A, D = any> = (
     action$: Observable<A>,
-    state$: StateObservable<S>,
     dependencies: D
 ) => Observable<O>;
 
 export const combineEpics =
-    <A extends Action, O extends A = A, S = any, D = any>(
-        ...epics: Epic<A, O, S, D>[]
-    ): Epic<A, O, S, D> => {
+    <A extends Action, O extends A = A, D = any>(
+        ...epics: Epic<A, O, D>[]
+    ): Epic<A, O, D> => {
 
-        const merger = (...args: Parameters<Epic<A, O, S, D>>) => merge(
+        const merger = (...args: Parameters<Epic<A, O, D>>) => merge(
             ...epics.map((epic) => {
                 const output$ = epic(...args);
                 if (!output$) {

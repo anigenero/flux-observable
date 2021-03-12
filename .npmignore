@@ -10,3 +10,6 @@ CONTRIBUTING.md
 .gitignore
 .travis.yml
 tsconfig.json
+
+jest.config.js
+jest.setup.ts

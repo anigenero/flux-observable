@@ -3,7 +3,6 @@ import {from, queueScheduler, Subject} from 'rxjs';
 import {QueueScheduler} from 'rxjs/internal/scheduler/QueueScheduler';
 import {map, mergeMap, observeOn, subscribeOn} from 'rxjs/operators';
 import {Action, Epic} from './combine.epics';
-import {StateObservable} from './state.observable';
 
 type QueueSchedulerType = typeof queueScheduler;
 const uniqueQueueScheduler: QueueSchedulerType = new QueueScheduler(
@@ -13,28 +12,21 @@ const uniqueQueueScheduler: QueueSchedulerType = new QueueScheduler(
 
 // creates a wrapper for dispatch that will send to the epic's observable chain
 export const dispatchWrapper =
-    <A extends Action, S, D = any>(
-        epic$: Subject<Epic<A, A, S, D>>,
+    <A extends Action, D = any>(
+        epic$: Subject<Epic<A, A, D>>,
         dispatch: Dispatch<any>,
-        state: S,
         dependencies: D
     ): Dispatch<A> => {
 
         const actionSubject$ = new Subject<A>();
-        const stateSubject$ = new Subject<S>();
         const action$ = actionSubject$
             .asObservable()
             .pipe(observeOn(uniqueQueueScheduler));
 
-        const state$ = new StateObservable(
-            stateSubject$.pipe(observeOn(uniqueQueueScheduler)),
-            state
-        );
-
         const result$ = epic$.pipe(
             map((epic) => {
 
-                const output$ = epic(action$, state$, dependencies);
+                const output$ = epic(action$, dependencies);
 
                 /* istanbul ignore if */
                 if (!output$) {
@@ -56,15 +48,10 @@ export const dispatchWrapper =
         );
 
         const _dispatch = (action: A) => {
-            stateSubject$.next(state);
             actionSubject$.next(action);
         };
 
-        result$.subscribe((action) => {
-            dispatch(action);
-            // we need to include our internal dispatch in case the return action refers to another epic
-            _dispatch(action);
-        });
+        result$.subscribe((action) => _dispatch(action));
 
         return _dispatch;
 

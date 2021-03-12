@@ -47,3 +47,8 @@ export const MyComponent: FunctionComponent = () => {
 
 }
 ```
+
+## Limitations
+
+Due to the React's reducer state being tied to the component tree lifecycle, there is no way to reliably provide a current state to the epics. Any 
+action(s) that requires visibility into the state will have to be done through the reducer.
