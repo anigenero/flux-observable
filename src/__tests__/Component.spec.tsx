@@ -1,11 +1,9 @@
-import {mount} from 'enzyme';
-import toJson from 'enzyme-to-json';
+import {render, screen} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import React, {Dispatch, FunctionComponent, Reducer} from 'react';
-import {create} from 'react-test-renderer';
 import {from, of} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
 import {createObservableReducerContext, Epic, ofType} from '../index';
-import 'jsdom-global/register';
 
 export type Dependencies = {
     service: (task: string) => string;
@@ -122,10 +120,10 @@ export const TaskComponent: FunctionComponent<TaskComponentProps> = ({taskName, 
     return (
         <div>
             {state.task}
-            <button id="task-dispatch-btn" onClick={() =>
+            <button data-testid="taskButton" onClick={() =>
                 dispatch(TaskDispatchActions.startTask(taskName))
             }/>
-            <button id="bad-dispatch-btn" onClick={() =>
+            <button data-testid="badTaskButton" onClick={() =>
                 dispatch(TaskDispatchActions.badTask(taskName))
             }/>
         </div>
@@ -144,14 +142,14 @@ describe('createObservableReducerContext', () => {
                 ReducerEpics.startTask
             ], {service: serviceFunction});
 
-        const tree = create(
+        const {asFragment} = render(
             <Provider options={{state: defaultState}}>
                 <TaskComponent taskName="test"
                                useContext={useObservableContext}/>
             </Provider>
-        ).toJSON();
+        );
 
-        expect(tree).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
 
     });
 
@@ -163,21 +161,23 @@ describe('createObservableReducerContext', () => {
             ], {service: serviceFunction}
         );
 
-        const wrapper = mount(
+        const {asFragment} = render(
             <Provider options={{state: defaultState}}>
                 <TaskComponent taskName="test"
                                useContext={useObservableContext}/>
             </Provider>
         );
 
-        const btn = wrapper.find('#task-dispatch-btn');
-        btn.simulate('click');
+        const firstRender = asFragment();
+        expect(firstRender).toMatchSnapshot();
 
-        expect(toJson(wrapper)).toMatchSnapshot();
+        userEvent.click(screen.getAllByTestId('taskButton')[0]);
 
-        btn.simulate('click');
+        expect(firstRender).toMatchSnapshot(asFragment());
 
-        expect(toJson(wrapper)).toMatchSnapshot();
+        userEvent.click(screen.getAllByTestId('taskButton')[0]);
+
+        expect(firstRender).toMatchSnapshot(asFragment());
 
     });
 
@@ -189,14 +189,14 @@ describe('createObservableReducerContext', () => {
             ], {service: serviceFunction}
         );
 
-        const tree = create(
+        const {asFragment} = render(
             <Provider options={{state: defaultState}}>
                 <TaskComponent taskName="test"
                                useContext={useObservableContext}/>
             </Provider>
-        ).toJSON();
+        );
 
-        expect(tree).toMatchSnapshot();
+        expect(asFragment()).toMatchSnapshot();
 
     });
 

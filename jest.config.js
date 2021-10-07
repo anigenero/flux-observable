@@ -9,10 +9,11 @@ module.exports = {
         'tsx',
         'js'
     ],
-    preset: 'ts-jest',
-    setupFiles: [
-        '<rootDir>/jest.setup.ts'
+    setupFilesAfterEnv: [
+        '<rootDir>/jest.setup.js'
     ],
+    preset: 'ts-jest',
+    testEnvironment: 'jest-environment-jsdom',
     transform: {
         '^.+\\.(js|jsx)?$': 'babel-jest'
     },
