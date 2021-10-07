@@ -24,6 +24,8 @@
   ],
   "ignorePatterns": [
     "*.d.ts",
+    "jest.config.js",
+    "jest.setup.ts",
     "webpack.config.js",
     "webpack.local.config.js"
   ],

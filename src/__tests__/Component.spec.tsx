@@ -5,6 +5,7 @@ import {create} from 'react-test-renderer';
 import {from, of} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
 import {createObservableReducerContext, Epic, ofType} from '../index';
+import 'jsdom-global/register';
 
 export type Dependencies = {
     service: (task: string) => string;

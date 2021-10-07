@@ -1,13 +1,12 @@
 import {Dispatch} from 'react';
 import {from, queueScheduler, Subject} from 'rxjs';
-import {QueueScheduler} from 'rxjs/internal/scheduler/QueueScheduler';
 import {map, mergeMap, observeOn, subscribeOn} from 'rxjs/operators';
 import {Action, Epic} from './combine.epics';
 
-type QueueSchedulerType = typeof queueScheduler;
-const uniqueQueueScheduler: QueueSchedulerType = new QueueScheduler(
+const QueueScheduler: any = queueScheduler.constructor;
+const uniqueQueueScheduler: typeof queueScheduler = new QueueScheduler(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    (queueScheduler as any).SchedulerAction
+    (queueScheduler as any).schedulerActionCtor
 );
 
 // creates a wrapper for dispatch that will send to the epic's observable chain
