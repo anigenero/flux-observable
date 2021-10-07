@@ -4,6 +4,7 @@ import {map, mergeMap, observeOn, subscribeOn} from 'rxjs/operators';
 import {Action, Epic} from './combine.epics';
 
 const QueueScheduler: any = queueScheduler.constructor;
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call
 const uniqueQueueScheduler: typeof queueScheduler = new QueueScheduler(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     (queueScheduler as any).schedulerActionCtor

@@ -1,4 +1,4 @@
-name: Build Luut Stack
+name: build
 defaults:
   run:
     shell: bash
